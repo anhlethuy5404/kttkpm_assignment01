@@ -32,5 +32,9 @@ class CartItem(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
+    @property
+    def total_price(self):
+        return self.book.price * self.quantity
+
     def __str__(self):
         return f"{self.quantity} of {self.book.title} in cart {self.cart.id}"

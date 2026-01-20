@@ -3,6 +3,7 @@ from django.views import View
 from ..usecases.customer_usecases import CustomerUseCases
 from django.contrib import messages
 from ..domain.models import Book, Customer
+from ..usecases.cart_usecases import CartUseCases
 
 class RegisterView(View):
     def get(self, request):
@@ -47,6 +48,40 @@ from django.contrib.auth import logout
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+def add_to_cart(request, book_id):
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect('login')
+        
+        try:
+            customer = Customer.objects.get(email=request.user.email)
+            quantity = int(request.POST.get('quantity', 1))
+            
+            cart_usecases = CartUseCases()
+            cart_usecases.add_to_cart(customer.id, book_id, quantity)
+            
+            messages.success(request, 'Book added to cart.')
+        except Customer.DoesNotExist:
+            messages.error(request, 'Customer profile not found.')
+        
+        return redirect('home')
+
+def view_cart(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+        
+    try:
+        customer = Customer.objects.get(email=request.user.email)
+        cart_usecases = CartUseCases()
+        cart_items = cart_usecases.get_cart_items(customer.id)
+        
+        total_price = sum(item.book.price * item.quantity for item in cart_items) if cart_items else 0
+        
+        return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price, 'customer': customer})
+    except Customer.DoesNotExist:
+        messages.error(request, 'Customer profile not found.')
+        return redirect('home')
 
 def home(request):
     books = Book.objects.all()

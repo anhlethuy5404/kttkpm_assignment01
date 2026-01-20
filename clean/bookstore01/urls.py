@@ -17,13 +17,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from django.contrib.auth.views import LogoutView
-from bookstore01.interfaces.views import RegisterView, LoginView, home
+from bookstore01.interfaces.views import RegisterView, LoginView, home, logout_view, add_to_cart, view_cart
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
+    path('logout/', logout_view, name='logout'),
     path('', home, name='home'),
+    path('cart/add/<int:book_id>/', add_to_cart, name='add_to_cart'),
+    path('cart/', view_cart, name='view_cart'),
 ]
