@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h2>Welcome to the Bookstore!</h2>
+    {% if user.is_authenticated and customer %}
+        <p>Welcome, {{ customer.name }}!</p>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    {% elif user.is_authenticated %}
+        <p>You are logged in as {{ user.username }}.</p>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    {% else %}
+        <p>You are not logged in.</p>
+        <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></p>
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+        <h2>Book Catalog</h2>
+        <ul>
+            {% for book in books %}
+                <li>
+                    <strong>{{ book.title }}</strong> by {{ book.author }} - ${{ book.price }} ({{ book.stock }} in stock)
+                </li>
+            {% empty %}
+                <li>No books available.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
