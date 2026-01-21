@@ -1,16 +1,25 @@
-1. Tạo file migration (Ghi nhận thay đổi code)
+### 1. Quản lý Database
 
+**Tạo file migration** (Ghi nhận thay đổi trong `models.py`):
+```bash
 python manage.py makemigrations
+```
 
-2. Thực thi vào Database (Tạo bảng trong MySQL)
-
+**Thực thi migration** (Áp dụng thay đổi vào MySQL):
+```bash
 python manage.py migrate
+```
 
-3. Chạy server: 
+### 2. Chạy ứng dụng
 
+**Khởi động Server:**
+```bash
 python manage.py runserver
+```
 
-4. Tạo project: có dấu chấm sau cùng thì không tạo folder con cùng tên
+### 3. Khởi tạo Project
 
-python -m django startproject bookstore01 . 
-
+**Tạo project Django mới** (Dấu `.` để không tạo thêm folder con):
+```bash
+python -m django startproject bookstore01 .
+```
